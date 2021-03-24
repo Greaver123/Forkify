@@ -1,0 +1,27 @@
+{
+  "name": "forkify",
+  "version": "1.0.0",
+  "description": "Final project for The Complete JavaScript Course 2021: From Zero To Expert!",
+  "main": "index.html",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "start": "parcel index.html",
+    "build": "parcel build index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Greaver123/Forkify.git"
+  },
+  "author": "Jonas Schmedtmann, Pawel Kolodziejczyk",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Greaver123/Forkify/issues"
+  },
+  "homepage": "https://github.com/Greaver123/Forkify#readme",
+  "devDependencies": {
+    "@parcel/transformer-sass": "^2.0.0-beta.2",
+    "parcel": "^2.0.0-beta.2"
+  }
+}

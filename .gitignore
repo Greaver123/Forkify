@@ -1,1 +1,11 @@
+#docs files:
 docs
+
+#Node
+node_modules
+
+#Parcel
+.parcel-cache
+
+#Dist
+dist
