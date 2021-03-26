@@ -1,5 +1,5 @@
-import { API_URL, RES_PER_PAGE } from './config.js';
-import { getJSON } from './helpers';
+import { API_URL, RES_PER_PAGE, KEY } from './config.js';
+import { getJSON, sendJSON } from './helpers';
 
 export const state = {
   recipe: {},
@@ -16,23 +16,27 @@ const persistsBookmarks = function () {
   localStorage.setItem('bookmarks', JSON.stringify(state.bookmarks));
 };
 
+const createRecipeObject = function (data) {
+  const { recipe } = data.data;
+  console.log(recipe);
+
+  return {
+    id: recipe.id,
+    title: recipe.title,
+    publisher: recipe.publisher,
+    sourceUrl: recipe.source_url,
+    image: recipe.image_url,
+    servings: recipe.servings,
+    cookingTime: recipe.cooking_time,
+    ingredients: recipe.ingredients,
+    ...(recipe.key && { key: recipe.key }),
+  };
+};
+
 export const loadRecipe = async function (id) {
   try {
     const data = await getJSON(`${API_URL}${id}`);
-
-    const { recipe } = data.data;
-    console.log(recipe);
-
-    state.recipe = {
-      id: recipe.id,
-      title: recipe.title,
-      publisher: recipe.publisher,
-      sourceUrl: recipe.source_url,
-      image: recipe.image_url,
-      servings: recipe.servings,
-      cookingTime: recipe.cooking_time,
-      ingredients: recipe.ingredients,
-    };
+    state.recipe = createRecipeObject(data);
 
     if (state.bookmarks.some(bookmark => bookmark.id === id))
       state.recipe.bookmarked = true;
@@ -98,6 +102,40 @@ export const deleteBookmark = function (id) {
   //mark currrent recipe as NOT bookmarked
   if (id === state.recipe.id) state.recipe.bookmarked = false;
   persistsBookmarks();
+};
+
+export const uploadRecipe = async function (newRecipe) {
+  try {
+    const ingredients = Object.entries(newRecipe)
+      .filter(entry => entry[0].startsWith('ingredient') && entry[1] !== '')
+      .map(ing => {
+        const ingArr = ing[1].replaceAll(' ', '').split(',');
+        if (ingArr.length !== 3)
+          throw new Error(
+            'Wrong ingredient format! Please use the correct format :)'
+          );
+        const [quantity, unit, description] = ingArr;
+        return { quantity: quantity ? +quantity : null, unit, description };
+      });
+
+    const recipe = {
+      title: newRecipe.title,
+      source_url: newRecipe.sourceUrl,
+      image_url: newRecipe.image,
+      publisher: newRecipe.publisher,
+      cooking_time: newRecipe.cookingTime,
+      servings: +newRecipe.servings,
+      ingredients,
+    };
+    console.log(recipe);
+    // 163359e0-e7b7-4649-bf3f-a8ccab23dfa6
+    const data = await sendJSON(`${API_URL}?key=${KEY}`, recipe);
+    console.log(data);
+    state.recipe = createRecipeObject(data);
+    addBookmark(state.recipe);
+  } catch (err) {
+    throw err;
+  }
 };
 
 const init = function () {
