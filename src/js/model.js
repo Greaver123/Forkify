@@ -19,7 +19,6 @@ const persistsBookmarks = function () {
 
 const createRecipeObject = function (data) {
   const { recipe } = data.data;
-  console.log(recipe);
 
   return {
     id: recipe.id,
@@ -79,7 +78,6 @@ export const getSearchResultsPage = function (page = state.search.page) {
 };
 
 export const updateServings = function (newServings) {
-  console.log(state.recipe);
   state.recipe.ingredients.forEach(ing => {
     ing.quantity = (ing.quantity * newServings) / state.recipe.servings;
   });
@@ -130,10 +128,7 @@ export const uploadRecipe = async function (newRecipe) {
       servings: +newRecipe.servings,
       ingredients,
     };
-    console.log(recipe);
-    // 163359e0-e7b7-4649-bf3f-a8ccab23dfa6
     const data = await AJAX(`${API_URL}?key=${KEY}`, recipe);
-    console.log(data);
     state.recipe = createRecipeObject(data);
     addBookmark(state.recipe);
   } catch (err) {
@@ -147,4 +142,3 @@ const init = function () {
 };
 
 init();
-console.log(state.bookmarks);

@@ -2,13 +2,13 @@
   "name": "forkify",
   "version": "1.0.0",
   "description": "Final project for The Complete JavaScript Course 2021: From Zero To Expert!",
-  "main": "index.html",
+  "default": "index.html",
   "directories": {
     "doc": "docs"
   },
   "scripts": {
     "start": "parcel index.html",
-    "build": "parcel build index.html"
+    "build": "parcel build index.html --dist-dir ./dist"
   },
   "repository": {
     "type": "git",

@@ -58,13 +58,11 @@ const controlSearchResults = async function () {
     //4) Render initial pagination buttons
     paginationView.render(model.state.search);
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
 };
 
 const controlPagination = function (goToPage) {
-  console.log(goToPage);
-
   //3) Render new results
   resultsView.render(model.getSearchResultsPage(goToPage));
 
@@ -98,13 +96,11 @@ const controlBookmarks = function () {
 };
 
 const controlAddRecip = async function (newRecipe) {
-  console.log(newRecipe);
   try {
     //show loading spinner
     addRecipeView.renderSpinner();
 
     await model.uploadRecipe(newRecipe);
-    console.log(model.state.recipe);
 
     //render recipe
     recipeView.render(model.state.recipe);
