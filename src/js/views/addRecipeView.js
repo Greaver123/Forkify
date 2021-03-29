@@ -14,7 +14,6 @@ class AddRecipeView extends View {
     super();
     this._addHandlerShowWindow();
     this._addHandlerHideWindow();
-    // this.addHandlerUpload();
   }
 
   _addHandlerShowWindow() {
